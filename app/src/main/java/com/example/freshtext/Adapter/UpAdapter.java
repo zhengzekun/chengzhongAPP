@@ -46,7 +46,7 @@ public class UpAdapter extends RecyclerView.Adapter<UpAdapter.UpViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull UpViewHolder holder, int position) {
         String str = list.get(position);
-        holder.textView.setText("111");
+        holder.textView.setText(str);
     }
 
     @Override

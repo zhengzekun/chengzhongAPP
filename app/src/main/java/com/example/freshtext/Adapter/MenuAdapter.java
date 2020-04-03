@@ -48,7 +48,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     public void onBindViewHolder(MenuViewHolder holder, int position) {
         String str = list.get(position);
         holder.imageView.setImageResource(R.mipmap.ic_launcher);
-        holder.textView.setText("111");
+        holder.textView.setText(str);
     }
 
     @Override

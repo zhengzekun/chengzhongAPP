@@ -29,7 +29,12 @@
             android:layout_weight="3"
             android:orientation="vertical">
             <!--    主界面-->
-            <include layout="@layout/layout_main"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/main_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 <!--        底部-->
         <LinearLayout

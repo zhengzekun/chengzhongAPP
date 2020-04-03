@@ -47,7 +47,7 @@ public class BottomAdapter  extends RecyclerView.Adapter<BottomAdapter.BottomVie
     @Override
     public void onBindViewHolder(@NonNull BottomViewHolder holder, int position) {
         String str = list.get(position);
-        holder.textView.setText("111");
+        holder.textView.setText(str);
     }
 
     @Override

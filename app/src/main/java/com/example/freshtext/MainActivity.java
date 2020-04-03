@@ -1,6 +1,7 @@
 package com.example.freshtext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.freshtext.Adapter.BottomAdapter;
+import com.example.freshtext.Adapter.GoodAdapter;
 import com.example.freshtext.Adapter.MenuAdapter;
 import com.example.freshtext.Adapter.UpAdapter;
 import com.example.freshtext.Entity.User;
@@ -30,11 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BottomAdapter bottomAdapter;
     private UpAdapter upAdapter;
     private MenuAdapter menuAdapter;
+    private GoodAdapter goodAdapter;
+
     private RecyclerView menu_recycler;
     private RecyclerView up_recycler;
     private RecyclerView bottom_recycler;
-    private Button text;
-    private Button user;
+    private RecyclerView main_recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +51,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menu_recycler = (RecyclerView) findViewById(R.id.menu_recycler);
         up_recycler = (RecyclerView) findViewById(R.id.up_recycler);
         bottom_recycler = (RecyclerView)findViewById(R.id.bottom_recycler);
+        main_recycler = (RecyclerView)findViewById(R.id.main_recycler);
     }
     //加载布局适配器
     public void uploadAdapter() {
         list = new ArrayList();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 7; i++) {
             list.add("item" + i);
         }
         //左侧菜单
@@ -72,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottom_recycler.setLayoutManager(linearLayoutManager_bottom);
         bottomAdapter = new BottomAdapter(list);
         bottom_recycler.setAdapter(bottomAdapter);
+        //主界面
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        main_recycler.setLayoutManager(gridLayoutManager);
+        goodAdapter = new GoodAdapter(list);
+        main_recycler.setAdapter(goodAdapter);
     }
 
     //按钮点击事件
@@ -92,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.pay:
                 Toast.makeText(this, "点击了支付", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.good:
+                list.add("增加的");
+                menuAdapter.notifyDataSetChanged();
                 break;
         }
     }
