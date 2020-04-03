@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="QMUI.Compat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 配置Android提供的theme -->
+        <item name="android:listPreferredItemHeight">?attr/qmui_list_item_height_higher</item>
+        <item name="android:listPreferredItemHeightSmall">?attr/qmui_list_item_height</item>
+
+        <!-- 配置qmui提供的theme -->
+        <item name="qmui_topbar_title_color">@color/qmui_config_color_white</item>
+        <item name="qmui_topbar_subtitle_color">@color/qmui_config_color_white</item>
+        <item name="qmui_topbar_height">48dp</item>
+        <item name="qmui_topbar_image_btn_height">48dp</item>
+        <item name="qmui_content_spacing_horizontal">20dp</item>
+        <item name="qmui_content_padding_horizontal">@dimen/qmui_content_spacing_horizontal</item>
+
+    </style>
+
+
+    <style name="MenuTabText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+</resources>
