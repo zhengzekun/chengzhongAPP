@@ -20,17 +20,16 @@
             android:layout_weight="2"
             android:gravity="center"
             android:orientation="vertical">
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            <com.example.freshtext.Utility.CircleImageView
                 android:id="@+id/user"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:gravity="center"
-                android:text="user"
-                app:qmui_radius="30dp"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="340dp"
-                tools:layout_editor_absoluteY="180dp"
-                android:onClick="onClick"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/user"
+                android:onClick="onClick">
+
+            </com.example.freshtext.Utility.CircleImageView>
         </LinearLayout>
 
         <LinearLayout

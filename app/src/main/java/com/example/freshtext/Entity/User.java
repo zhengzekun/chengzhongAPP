@@ -10,6 +10,7 @@ public class User extends Application implements Serializable {
     private String name;
     private String password;
     private int phone;
+    private String image;
 
     public User(String name, String password) {
         this.name = name;
@@ -47,5 +48,13 @@ public class User extends Application implements Serializable {
 
     public void setPhone(int phone) {
         this.phone = phone;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

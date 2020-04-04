@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.freshtext.Activity.UserActivity;
 import com.example.freshtext.Adapter.BottomAdapter;
 import com.example.freshtext.Adapter.GoodAdapter;
 import com.example.freshtext.Adapter.MenuAdapter;
@@ -140,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user:
-                Toast.makeText(this, "点击了用户", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent);
                 break;
             case R.id.text:
                 list.add("1");
