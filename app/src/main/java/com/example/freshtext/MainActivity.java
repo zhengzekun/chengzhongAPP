@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.freshtext.Adapter.BottomAdapter;
@@ -21,13 +23,19 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static Boolean isExit = false;
     final HttpUtility httpUtility = new HttpUtility();
+
+    private User user;
     private List list;
     private BottomAdapter bottomAdapter;
     private UpAdapter upAdapter;
@@ -39,20 +47,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView bottom_recycler;
     private RecyclerView main_recycler;
 
+    private TextView userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //接收登录界面传回的user对象
+        Intent re = getIntent();
+        user = (User) re.getExtras().get("user");
         init();
         uploadAdapter();
     }
-    //加载组件
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    //点击两下返回按钮退出程序
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            exitBy2Click();
+        }
+        return false;
+    }
+    /** * 双击退出函数 */
+    private void exitBy2Click() {
+        Timer tExit = null;
+        if (isExit == false) {
+            isExit = true;
+            // 准备退出
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            tExit = new Timer(); tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false;
+                    // 取消退出
+                } }, 2000);
+            // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
+
+    //加载控件
     public void init() {
         menu_recycler = (RecyclerView) findViewById(R.id.menu_recycler);
         up_recycler = (RecyclerView) findViewById(R.id.up_recycler);
         bottom_recycler = (RecyclerView)findViewById(R.id.bottom_recycler);
         main_recycler = (RecyclerView)findViewById(R.id.main_recycler);
+
+        userName = (TextView)findViewById(R.id.user_name);
+        if (user != null) {
+            userName.setText(user.getName());
+        }
     }
+
     //加载布局适配器
     public void uploadAdapter() {
         list = new ArrayList();

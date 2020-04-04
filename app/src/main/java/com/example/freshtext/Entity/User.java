@@ -1,11 +1,21 @@
 package com.example.freshtext.Entity;
 
+import android.app.Application;
+
+import java.io.Serializable;
+
 //用户
-public class User {
+public class User extends Application implements Serializable {
     private int id;
     private String name;
     private String password;
     private int phone;
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+    private User() {}
 
     public int getId() {
         return id;
