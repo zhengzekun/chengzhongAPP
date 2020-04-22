@@ -9,12 +9,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freshtext.Entity.Category;
 import com.example.freshtext.R;
 
 import java.util.List;
 
-public class UpAdapter extends RecyclerView.Adapter<UpAdapter.UpViewHolder> {
-    private List<String> list;
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.UpViewHolder> {
+    private List<Category> categoryList;
     static class UpViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         public UpViewHolder(View view) {
@@ -23,8 +24,8 @@ public class UpAdapter extends RecyclerView.Adapter<UpAdapter.UpViewHolder> {
         }
     }
 
-    public UpAdapter(List<String> list_2) {
-        list = list_2;
+    public CategoryAdapter(List<Category> categories) {
+        categoryList = categories;
     }
 
     @NonNull
@@ -36,8 +37,8 @@ public class UpAdapter extends RecyclerView.Adapter<UpAdapter.UpViewHolder> {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                String str = list.get(position);
-                Toast.makeText(v.getContext(), "点击了" + str, Toast.LENGTH_LONG).show();
+                Category category = categoryList.get(position);
+                Toast.makeText(v.getContext(), "点击了" + category.getName(), Toast.LENGTH_LONG).show();
             }
         });
         return holder;
@@ -45,12 +46,12 @@ public class UpAdapter extends RecyclerView.Adapter<UpAdapter.UpViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull UpViewHolder holder, int position) {
-        String str = list.get(position);
-        holder.textView.setText(str);
+        String name = categoryList.get(position).getName();
+        holder.textView.setText(name);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return categoryList.size();
     }
 }

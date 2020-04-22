@@ -17,10 +17,13 @@ import com.example.freshtext.Activity.UserActivity;
 import com.example.freshtext.Adapter.BottomAdapter;
 import com.example.freshtext.Adapter.GoodAdapter;
 import com.example.freshtext.Adapter.MenuAdapter;
-import com.example.freshtext.Adapter.UpAdapter;
+import com.example.freshtext.Adapter.CategoryAdapter;
+import com.example.freshtext.Entity.Category;
 import com.example.freshtext.Entity.User;
 import com.example.freshtext.Utility.HttpUtility;
+import com.example.freshtext.Utility.JsonUtility;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private User user;
     private List list;
+    private List<Category> categoryList;
     private BottomAdapter bottomAdapter;
-    private UpAdapter upAdapter;
+    private CategoryAdapter categoryAdapter;
     private MenuAdapter menuAdapter;
     private GoodAdapter goodAdapter;
 
@@ -122,8 +126,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayoutManager linearLayoutManager_up = new LinearLayoutManager(this);
         linearLayoutManager_up.setOrientation(RecyclerView.HORIZONTAL);
         up_recycler.setLayoutManager(linearLayoutManager_up);
-        upAdapter = new UpAdapter(list);
-        up_recycler.setAdapter(upAdapter);
+        getCategory();
+        categoryAdapter = new CategoryAdapter(categoryList);
+        up_recycler.setAdapter(categoryAdapter);
         //底部
         LinearLayoutManager linearLayoutManager_bottom = new LinearLayoutManager(this);
         linearLayoutManager_bottom.setOrientation(RecyclerView.HORIZONTAL);
@@ -162,6 +167,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 menuAdapter.notifyDataSetChanged();
                 break;
         }
+    }
+
+    //获取类别
+    public List<Category> getCategory() {
+        RequestBody body = new FormBody.Builder()
+                .add("enabled","1")
+                .build();
+        String res = httpUtility.post(body, "http://192.168.31.60:10031/category").toString();
+        categoryList= (List<Category>) JsonUtility.getList(res,new TypeToken<ArrayList<Category>>() {}.getType());
+        return categoryList;
     }
 
     private void get() {
