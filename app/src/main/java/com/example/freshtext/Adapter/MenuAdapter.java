@@ -9,12 +9,13 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freshtext.Entity.Good;
 import com.example.freshtext.R;
 
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
-    private List<String> list;
+    private List<Good> list;
     static class MenuViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
@@ -25,7 +26,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         }
     }
 
-    public MenuAdapter(List<String> list_2) {
+    public MenuAdapter(List<Good> list_2) {
         list = list_2;
     }
 
@@ -37,8 +38,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                String str = list.get(position);
-                Toast.makeText(v.getContext(), "点击了" + str, Toast.LENGTH_LONG).show();
+                Good good = list.get(position);
+                Toast.makeText(v.getContext(), "点击了menuAdapter" + good.getName(), Toast.LENGTH_LONG).show();
             }
         });
         return holder;
@@ -46,9 +47,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(MenuViewHolder holder, int position) {
-        String str = list.get(position);
+        Good good = list.get(position);
         holder.imageView.setImageResource(R.mipmap.ic_launcher);
-        holder.textView.setText(str);
+        holder.textView.setText(good.getName());
     }
 
     @Override

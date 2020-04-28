@@ -17,21 +17,24 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
-        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        <Button
             android:id="@+id/order"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="订单"
-            app:qmui_radius="8dp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="340dp"
-            tools:layout_editor_absoluteY="180dp"
+            android:background="@drawable/order"
             android:onClick="onClick"/>
+        <TextView
+            android:text="订单"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

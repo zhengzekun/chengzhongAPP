@@ -6,18 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freshtext.Entity.Good;
+import com.example.freshtext.MainActivity;
 import com.example.freshtext.R;
 
 import java.util.List;
 
 public class GoodAdapter extends RecyclerView.Adapter<GoodAdapter.ViewHolder> {
-    private Context mContext;
-    private List<String> list;
+    private List<Good> list;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -32,24 +34,30 @@ public class GoodAdapter extends RecyclerView.Adapter<GoodAdapter.ViewHolder> {
         }
     }
 
-    public GoodAdapter(List<String> list_2) {
+    public GoodAdapter(List<Good> list_2) {
         list = list_2;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (mContext == null) {
-            mContext = parent.getContext();
-        }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_main, parent, false);
-        return new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_main, parent, false);
+        final ViewHolder holder = new ViewHolder(view);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                Good good = list.get(position);
+                MainActivity.instance.addGoodWant(good);
+            }
+        });
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String str = list.get(position);
-        holder.textView.setText(str);
+        Good good = list.get(position);
+        holder.textView.setText(good.getName());
         holder.imageView.setImageResource(R.mipmap.ic_launcher);
     }
 

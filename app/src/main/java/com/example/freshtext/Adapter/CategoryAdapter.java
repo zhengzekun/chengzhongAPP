@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.freshtext.Entity.Category;
+import com.example.freshtext.MainActivity;
 import com.example.freshtext.R;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.UpView
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Category category = categoryList.get(position);
+                MainActivity.instance.getGood(category.getId(), true);
                 Toast.makeText(v.getContext(), "点击了" + category.getName(), Toast.LENGTH_LONG).show();
             }
         });

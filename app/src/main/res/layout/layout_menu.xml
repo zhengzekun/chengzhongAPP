@@ -21,7 +21,7 @@
             android:gravity="center"
             android:orientation="vertical">
             <com.example.freshtext.Utility.CircleImageView
-                android:id="@+id/user"
+                android:id="@+id/user_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:gravity="center"
@@ -66,13 +66,33 @@
         android:layout_weight="1"
         android:gravity="bottom"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pay"
+                android:onClick="onClick"/>
+        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/pay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:onClick="onClick"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/pay_text"
+                android:text="支付"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
 

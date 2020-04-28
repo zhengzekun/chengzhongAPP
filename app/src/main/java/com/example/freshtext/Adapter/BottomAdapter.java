@@ -38,7 +38,7 @@ public class BottomAdapter  extends RecyclerView.Adapter<BottomAdapter.BottomVie
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 String str = list.get(position);
-                Toast.makeText(v.getContext(), "点击了" + str, Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(), "点击了bottomAdapter" + str, Toast.LENGTH_LONG).show();
             }
         });
         return holder;

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.example.freshtext.Adapter.GoodAdapter;
 import com.example.freshtext.Adapter.MenuAdapter;
 import com.example.freshtext.Adapter.CategoryAdapter;
 import com.example.freshtext.Entity.Category;
+import com.example.freshtext.Entity.Good;
 import com.example.freshtext.Entity.User;
 import com.example.freshtext.Utility.HttpUtility;
 import com.example.freshtext.Utility.JsonUtility;
@@ -36,12 +38,15 @@ import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static MainActivity instance = null;
     private static Boolean isExit = false;
     final HttpUtility httpUtility = new HttpUtility();
 
     private User user;
     private List list;
-    private List<Category> categoryList;
+    private List<Category> categoryList = null;
+    private List<Good> goodList = null;
+    private List<Good> goodList_want = new ArrayList<>();
     private BottomAdapter bottomAdapter;
     private CategoryAdapter categoryAdapter;
     private MenuAdapter menuAdapter;
@@ -53,17 +58,135 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView main_recycler;
 
     private TextView userName;
+    private ImageView user_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
         //接收登录界面传回的user对象
         Intent re = getIntent();
         user = (User) re.getExtras().get("user");
         init();
         uploadAdapter();
     }
+
+    /**
+     * 初始化控件
+     */
+    public void init() {
+        menu_recycler = (RecyclerView) findViewById(R.id.menu_recycler);
+        up_recycler = (RecyclerView) findViewById(R.id.up_recycler);
+        bottom_recycler = (RecyclerView)findViewById(R.id.bottom_recycler);
+        main_recycler = (RecyclerView)findViewById(R.id.main_recycler);
+
+        userName = (TextView)findViewById(R.id.user_name);
+        user_image = (ImageView)findViewById(R.id.user_image);
+        if (user != null) {
+            userName.setText(user.getName());
+            user_image.setImageResource(R.drawable.zzk);
+        }
+    }
+
+    /**
+     * 加载布局适配器
+     */
+    public void uploadAdapter() {
+        list = new ArrayList();
+        for (int i = 0; i < 7; i++) {
+            list.add("item" + i);
+        }
+        //左侧菜单
+        LinearLayoutManager linearLayoutManager_menu = new LinearLayoutManager(this);
+        menu_recycler.setLayoutManager(linearLayoutManager_menu);
+        menuAdapter = new MenuAdapter(goodList_want);
+        menu_recycler.setAdapter(menuAdapter);
+        //顶部
+        LinearLayoutManager linearLayoutManager_up = new LinearLayoutManager(this);
+        linearLayoutManager_up.setOrientation(RecyclerView.HORIZONTAL);
+        up_recycler.setLayoutManager(linearLayoutManager_up);
+        getCategory();
+        categoryAdapter = new CategoryAdapter(categoryList);
+        up_recycler.setAdapter(categoryAdapter);
+        //底部
+        LinearLayoutManager linearLayoutManager_bottom = new LinearLayoutManager(this);
+        linearLayoutManager_bottom.setOrientation(RecyclerView.HORIZONTAL);
+        bottom_recycler.setLayoutManager(linearLayoutManager_bottom);
+        bottomAdapter = new BottomAdapter(list);
+        bottom_recycler.setAdapter(bottomAdapter);
+        //主界面
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        main_recycler.setLayoutManager(gridLayoutManager);
+        getGood(1, false);
+        goodAdapter = new GoodAdapter(goodList);
+        main_recycler.setAdapter(goodAdapter);
+    }
+
+    /**
+     * 按钮点击事件
+     * @param view
+     */
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.user_image:
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.set:
+                Toast.makeText(this, "点击了设置", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.order:
+                Toast.makeText(this, "点击了订单", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.pay:
+                Toast.makeText(this, "点击了支付", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    /**
+     * 获取所有类别
+     * @return
+     */
+    public List<Category> getCategory() {
+        RequestBody body = new FormBody.Builder()
+                .add("enabled","1")
+                .build();
+        String res = httpUtility.post(body, "http://192.168.31.60:10031/category").toString();
+        categoryList= (List<Category>) JsonUtility.getList(res,new TypeToken<ArrayList<Category>>() {}.getType());
+        return categoryList;
+    }
+
+    /**
+     * 获取该类别下的商品
+     * @param category
+     * @param change
+     * @return
+     */
+    public List<Good> getGood(int category, boolean change) {
+        RequestBody body = new FormBody.Builder()
+                .add("enabled","1")
+                .build();
+        String res = httpUtility.post(body, "http://192.168.31.60:10031/good/" + category).toString();
+        goodList= (List<Good>) JsonUtility.getList(res,new TypeToken<ArrayList<Good>>() {}.getType());
+        if (change && res != null) {
+            goodAdapter = new GoodAdapter(goodList);
+            main_recycler.setAdapter(goodAdapter);
+        }
+        return goodList;
+    }
+
+    /**
+     * 增加欲购买的商品至左边菜单
+     * @param good
+     */
+    public void addGoodWant(Good good) {
+        goodList_want.add(good);
+        menuAdapter.notifyDataSetChanged();
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -78,7 +201,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return false;
     }
-    /** * 双击退出函数 */
+    /**
+     * 双击退出函数
+     *
+     */
     private void exitBy2Click() {
         Timer tExit = null;
         if (isExit == false) {
@@ -98,87 +224,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //加载控件
-    public void init() {
-        menu_recycler = (RecyclerView) findViewById(R.id.menu_recycler);
-        up_recycler = (RecyclerView) findViewById(R.id.up_recycler);
-        bottom_recycler = (RecyclerView)findViewById(R.id.bottom_recycler);
-        main_recycler = (RecyclerView)findViewById(R.id.main_recycler);
-
-        userName = (TextView)findViewById(R.id.user_name);
-        if (user != null) {
-            userName.setText(user.getName());
-        }
-    }
-
-    //加载布局适配器
-    public void uploadAdapter() {
-        list = new ArrayList();
-        for (int i = 0; i < 7; i++) {
-            list.add("item" + i);
-        }
-        //左侧菜单
-        LinearLayoutManager linearLayoutManager_menu = new LinearLayoutManager(this);
-        menu_recycler.setLayoutManager(linearLayoutManager_menu);
-        menuAdapter = new MenuAdapter(list);
-        menu_recycler.setAdapter(menuAdapter);
-        //顶部
-        LinearLayoutManager linearLayoutManager_up = new LinearLayoutManager(this);
-        linearLayoutManager_up.setOrientation(RecyclerView.HORIZONTAL);
-        up_recycler.setLayoutManager(linearLayoutManager_up);
-        getCategory();
-        categoryAdapter = new CategoryAdapter(categoryList);
-        up_recycler.setAdapter(categoryAdapter);
-        //底部
-        LinearLayoutManager linearLayoutManager_bottom = new LinearLayoutManager(this);
-        linearLayoutManager_bottom.setOrientation(RecyclerView.HORIZONTAL);
-        bottom_recycler.setLayoutManager(linearLayoutManager_bottom);
-        bottomAdapter = new BottomAdapter(list);
-        bottom_recycler.setAdapter(bottomAdapter);
-        //主界面
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
-        main_recycler.setLayoutManager(gridLayoutManager);
-        goodAdapter = new GoodAdapter(list);
-        main_recycler.setAdapter(goodAdapter);
-    }
-
-    //按钮点击事件
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.user:
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.text:
-                list.add("1");
-                menuAdapter.notifyDataSetChanged();
-                break;
-            case R.id.set:
-                Toast.makeText(this, "点击了设置", Toast.LENGTH_LONG).show();
-                break;
-            case R.id.order:
-                Toast.makeText(this, "点击了订单", Toast.LENGTH_LONG).show();
-                break;
-            case R.id.pay:
-                Toast.makeText(this, "点击了支付", Toast.LENGTH_LONG).show();
-                break;
-            case R.id.good:
-                list.add("增加的");
-                menuAdapter.notifyDataSetChanged();
-                break;
-        }
-    }
-
-    //获取类别
-    public List<Category> getCategory() {
-        RequestBody body = new FormBody.Builder()
-                .add("enabled","1")
-                .build();
-        String res = httpUtility.post(body, "http://192.168.31.60:10031/category").toString();
-        categoryList= (List<Category>) JsonUtility.getList(res,new TypeToken<ArrayList<Category>>() {}.getType());
-        return categoryList;
-    }
-
+    /**
+     * 以下代码仅做参考
+     */
     private void get() {
         String res = httpUtility.get("http://192.168.0.63:10031/home").toString();
         Gson gson = new Gson();
