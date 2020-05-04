@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .add("name",userName.getText().toString())
                         .add("password", userPassword.getText().toString())
                         .build();
-                String res = httpUtility.post(body, "http://192.168.0.6:10031/login").toString();
+                String res = httpUtility.post(body, "http://192.168.43.245:10031/login").toString();
                 Gson gson = new Gson();
                 user = gson.fromJson(res, User.class);
                 //登陆成功则写入SharedPreferences
@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void get() {
-        String res = httpUtility.get("http://192.168.0.63:10031/home").toString();
+        String res = httpUtility.get("http://192.168.43.245:10031/home").toString();
         Gson gson = new Gson();
         User user = gson.fromJson(res, User.class);
         Log.i("WY","打印GET响应的数据：" + user);
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .add("name","zzk")
                 .add("password", "123456")
                 .build();
-        String res = httpUtility.post(body, "http://192.168.0.63:10031/login").toString();
+        String res = httpUtility.post(body, "http://192.168.43.245:10031/login").toString();
         Gson gson = new Gson();
         User user = gson.fromJson(res, User.class);
         Log.i("WY","打印POST响应的数据：" + res);

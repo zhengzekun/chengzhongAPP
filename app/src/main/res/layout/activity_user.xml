@@ -55,21 +55,23 @@
                 android:id="@+id/item_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:icon="@drawable/zzk"
+                app:icon="@drawable/user_name"
                 app:name="用户名"
                 android:background="#fff"
                 app:show_more="true"
-                app:show_line="true" />
+                app:show_line="true"
+                android:onClick="onClick"/>
 
             <com.example.freshtext.Utility.UserItemView
                 android:id="@+id/item_phone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:icon="@drawable/zzk"
-                app:name="用户名"
+                app:icon="@drawable/user_phone"
+                app:name="手机号"
                 android:background="#fff"
                 app:show_more="true"
-                app:show_line="true" />
+                app:show_line="true"
+                android:onClick="onClick"/>
         </LinearLayout>
 
 

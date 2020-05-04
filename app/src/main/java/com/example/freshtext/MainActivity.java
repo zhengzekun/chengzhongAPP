@@ -21,6 +21,7 @@ import com.example.freshtext.Adapter.MenuAdapter;
 import com.example.freshtext.Adapter.CategoryAdapter;
 import com.example.freshtext.Entity.Category;
 import com.example.freshtext.Entity.Good;
+import com.example.freshtext.Entity.ShoppingCart;
 import com.example.freshtext.Entity.User;
 import com.example.freshtext.Utility.HttpUtility;
 import com.example.freshtext.Utility.JsonUtility;
@@ -43,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final HttpUtility httpUtility = new HttpUtility();
 
     private User user;
-    private List list;
     private List<Category> categoryList = null;
     private List<Good> goodList = null;
     private List<Good> goodList_want = new ArrayList<>();
+    private List<ShoppingCart> shoppingCartList = new ArrayList<>();
     private BottomAdapter bottomAdapter;
     private CategoryAdapter categoryAdapter;
     private MenuAdapter menuAdapter;
@@ -93,10 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 加载布局适配器
      */
     public void uploadAdapter() {
-        list = new ArrayList();
-        for (int i = 0; i < 7; i++) {
-            list.add("item" + i);
-        }
         //左侧菜单
         LinearLayoutManager linearLayoutManager_menu = new LinearLayoutManager(this);
         menu_recycler.setLayoutManager(linearLayoutManager_menu);
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayoutManager linearLayoutManager_bottom = new LinearLayoutManager(this);
         linearLayoutManager_bottom.setOrientation(RecyclerView.HORIZONTAL);
         bottom_recycler.setLayoutManager(linearLayoutManager_bottom);
-        bottomAdapter = new BottomAdapter(list);
+        bottomAdapter = new BottomAdapter(shoppingCartList);
         bottom_recycler.setAdapter(bottomAdapter);
         //主界面
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -134,13 +131,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.set:
+                //TODO：转到设置界面
                 Toast.makeText(this, "点击了设置", Toast.LENGTH_LONG).show();
                 break;
             case R.id.order:
+                //TODO：转到订单界面
                 Toast.makeText(this, "点击了订单", Toast.LENGTH_LONG).show();
                 break;
             case R.id.pay:
+                //TODO：弹出框确认支付
                 Toast.makeText(this, "点击了支付", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.add_shopping_cart:
+                //TODO：弹出框设置购物车名
+                saveShoppingCart();
+                Toast.makeText(this, "增加购物车", Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestBody body = new FormBody.Builder()
                 .add("enabled","1")
                 .build();
-        String res = httpUtility.post(body, "http://192.168.31.60:10031/category").toString();
+        String res = httpUtility.post(body, "http://192.168.43.245:10031/category").toString();
         categoryList= (List<Category>) JsonUtility.getList(res,new TypeToken<ArrayList<Category>>() {}.getType());
         return categoryList;
     }
@@ -168,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestBody body = new FormBody.Builder()
                 .add("enabled","1")
                 .build();
-        String res = httpUtility.post(body, "http://192.168.31.60:10031/good/" + category).toString();
+        String res = httpUtility.post(body, "http://192.168.43.245:10031/good/" + category).toString();
         goodList= (List<Good>) JsonUtility.getList(res,new TypeToken<ArrayList<Good>>() {}.getType());
         if (change && res != null) {
             goodAdapter = new GoodAdapter(goodList);
@@ -186,7 +191,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuAdapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * 新增购物车
+     */
+    public void saveShoppingCart(){
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setName("购物车3");
+        shoppingCart.setEnabled(true);
+        RequestBody body = new FormBody.Builder()
+                .add("name", shoppingCart.getName())
+                .add("enabled", "1")
+                .build();
+        String res = httpUtility.post(body, "http://192.168.43.245:10031/shoppingcart/save").toString();
+        shoppingCartList.add(shoppingCart);
+        bottomAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onBackPressed() {

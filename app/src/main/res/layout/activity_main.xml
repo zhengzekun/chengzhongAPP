@@ -6,7 +6,14 @@
     tools:context=".MainActivity">
 
     <!--左侧菜单-->
-    <include layout="@layout/layout_menu"/>
+    <include layout="@layout/layout_menu" />
+    <View
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_alignParentBottom="true"
+        android:background="#000000"
+        android:layout_width="0.2dip"
+        android:layout_height="fill_parent"/>
     <!--右侧布局-->
     <LinearLayout
         android:layout_width="fill_parent"
@@ -21,6 +28,13 @@
 
             <include layout="@layout/layout_upmenu"/>
         </LinearLayout>
+        <View
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:layout_alignParentBottom="true"
+            android:background="#000000"
+            android:layout_width="fill_parent"
+            android:layout_height="0.2dip"/>
 <!--        中间主界面-->
         <LinearLayout
             android:layout_width="fill_parent"
@@ -41,6 +55,13 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
+            <View
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:layout_alignParentBottom="true"
+                android:background="#000000"
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dip"/>
 
             <include layout="@layout/layout_bottommenu"/>
 
