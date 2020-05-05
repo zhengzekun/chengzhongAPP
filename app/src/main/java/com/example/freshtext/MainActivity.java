@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.freshtext.Activity.CommonDialog;
 import com.example.freshtext.Activity.UserActivity;
 import com.example.freshtext.Adapter.BottomAdapter;
 import com.example.freshtext.Adapter.GoodAdapter;
@@ -144,7 +145,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.add_shopping_cart:
                 //TODO：弹出框设置购物车名
-                saveShoppingCart();
+                final CommonDialog dialog = new CommonDialog(MainActivity.this);
+                dialog.setTitle("增加购物车")
+                        .setTextView_1_message("购物车名：")
+                        .setSingle(false).setOnClickBottomListener(new CommonDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        dialog.dismiss();
+                        CommonDialog.instance.onClick(true, 1);
+                    }
+
+                    @Override
+                    public void onNegtiveClick() {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "点击了取消", Toast.LENGTH_LONG).show();
+                    }
+                }).show();
                 Toast.makeText(this, "增加购物车", Toast.LENGTH_LONG).show();
                 break;
         }
@@ -194,17 +210,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 新增购物车
      */
-    public void saveShoppingCart(){
+    public void saveShoppingCart(String name){
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setName("购物车3");
+        shoppingCart.setName(name);
         shoppingCart.setEnabled(true);
         RequestBody body = new FormBody.Builder()
                 .add("name", shoppingCart.getName())
                 .add("enabled", "1")
                 .build();
-        String res = httpUtility.post(body, "http://192.168.43.245:10031/shoppingcart/save").toString();
-        shoppingCartList.add(shoppingCart);
-        bottomAdapter.notifyDataSetChanged();
+        String res = httpUtility.post(body, "http://192.168.43.245:10031/shoppingcart/name").toString();
+        ShoppingCart sc = (ShoppingCart)JsonUtility.fromJson(res, ShoppingCart.class);
+        //判断该购物车是否已存在
+        if (sc == null) {
+            httpUtility.post(body, "http://192.168.43.245:10031/shoppingcart/save");
+            shoppingCartList.add(shoppingCart);
+            bottomAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "已经存在该购物车", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

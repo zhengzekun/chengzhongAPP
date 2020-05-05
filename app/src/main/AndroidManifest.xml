@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.UserActivity"></activity>
+        <activity android:name=".Activity.CommonDialog"></activity>
+        <activity android:name=".Activity.UserActivity" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +23,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance" />
     </application>
 
 </manifest>
